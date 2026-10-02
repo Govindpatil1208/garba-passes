@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-mist font-body text-ink antialiased; font-size: 17px; }
+  :focus-visible { outline: 3px solid #F7A81B; outline-offset: 2px; }
+}
+
+@layer components {
+  .card { @apply rounded-2xl bg-white p-4 shadow-sm ring-1 ring-night/10; }
+  .btn { @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl px-5 text-base font-bold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40; }
+  .btn-primary { @apply btn bg-rani text-white hover:bg-[#b81c5c]; }
+  .btn-dark { @apply btn bg-night text-white hover:bg-[#33267f]; }
+  .btn-ghost { @apply btn bg-white text-night ring-1 ring-night/20 hover:bg-mist; }
+  .btn-sm { @apply min-h-[40px] px-4 text-sm; }
+  .input { @apply min-h-[52px] w-full rounded-xl border-0 bg-white px-4 text-lg ring-1 ring-night/25 placeholder:text-ink/40 focus:ring-2 focus:ring-rani; }
+  .label { @apply mb-1 block text-sm font-bold text-night; }
+  .tbl { @apply w-full text-left text-[15px]; }
+  .tbl th { @apply whitespace-nowrap bg-night/5 px-2 py-2.5 text-sm font-bold text-night sm:px-3; }
+  .tbl td { @apply whitespace-nowrap border-t border-night/10 px-2 py-3 sm:px-3; }
+  .tbl .num { @apply text-right tabular-nums; }
+  .tbl-fit { @apply table-fixed; }
+  .tbl-fit th { @apply whitespace-normal px-1.5 text-[13px] sm:px-3 sm:text-sm; }
+  .tbl-fit td { @apply px-1.5 sm:px-3; }
+  .chip { @apply inline-flex min-h-[40px] items-center rounded-full px-4 text-sm font-bold ring-1 ring-night/20 bg-white text-night; }
+  .chip-on { @apply bg-night text-white ring-night; }
+  .err { @apply rounded-xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700 ring-1 ring-red-200; }
+  .okmsg { @apply rounded-xl bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800 ring-1 ring-emerald-200; }
+}
+
+/* The one decorative moment: a toran (festive doorway garland) under the header */
+.toran {
+  height: 14px;
+  background:
+    linear-gradient(135deg, transparent 50%, #F7A81B 50%) 0 0 / 28px 14px repeat-x,
+    linear-gradient(225deg, transparent 50%, #D6246E 50%) 14px 0 / 28px 14px repeat-x;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

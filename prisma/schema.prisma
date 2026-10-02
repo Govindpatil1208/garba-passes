@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  TEAM
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  username     String   @unique
+  mobile       String?  @unique
+  passwordHash String
+  role         Role     @default(TEAM)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  allocations Allocation[]
+  inventories Inventory[]
+  sales       Sale[]
+}
+
+// Every time admin gives passes, one row is logged here (history, can be edited/revoked).
+model Allocation {
+  id        String   @id @default(cuid())
+  userId    String
+  eventDate String // "2026-10-11"
+  quantity  Int
+  note      String?
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, eventDate])
+}
+
+// One row per team member per event date. Received - Sold = Remaining.
+model Inventory {
+  id        String   @id @default(cuid())
+  userId    String
+  eventDate String
+  received  Int      @default(0)
+  sold      Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, eventDate])
+  @@index([eventDate])
+}
+
+model Sale {
+  id         String   @id @default(cuid())
+  saleNo     Int      @unique @default(autoincrement())
+  userId     String
+  memberName String // name at the time of sale
+  eventDate  String
+  quantity   Int
+  amount     Int // whole rupees
+  requestId  String   @unique // stops double-tap / duplicate submissions
+  soldAt     DateTime @default(now())
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([eventDate])
+  @@index([userId])
+  @@index([soldAt])
+}
